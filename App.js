@@ -21,6 +21,7 @@ import Header from './src/components/header';
 import generalStyles from  './src/utils/generalStyles';
 import Input from  './src/components/input';
 import {colors} from  './src/utils/constants';
+import Todo from './src/components/todo';
 
 
 
@@ -49,7 +50,10 @@ function App(){
       <View style={styles.todosWrapper}>
         {todos.length === 0 ? (<Text style={styles.emptyText}>Henuz Kayitli Bir Todo Bulunmamaktadir</Text>) : (
         <ScrollView style={styles.scrollView}>
-          <Text>todo dizisi dolu</Text>
+          {
+            todos?.map(todo=>(<Todo key={todo?.id} todo={todo}/>))
+          }
+          
         </ScrollView>)}
         <Text>Todo App</Text>
      
@@ -64,7 +68,6 @@ const styles = StyleSheet.create({
     flex:1,
     marginHorizontal:20,
     marginVertical:30,
-    borderWidth:1
   },
   emptyText:{
     textAlign: 'center',
