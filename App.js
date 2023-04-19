@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -22,6 +22,7 @@ import generalStyles from  './src/utils/generalStyles';
 import Input from  './src/components/input';
 import {colors} from  './src/utils/constants';
 import Todo from './src/components/todo';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -34,10 +35,27 @@ function App(){
       text: text,
       date: new Date(),
       completed: false
-    }
-    setTodos([...todos, newTodo])
-    setText("")
-  }
+    };
+    AsyncStorage.setItem('@todos', JSON.stringify([...todos, newTodo]))
+      .then(() => {
+        setTodos([...todos, newTodo]);
+        setText("");
+      })
+      .catch(err => {
+        Alert.alert("Hata","Kayit esnasinda bir hata olustu")
+      });
+  };
+  useEffect(()=>{
+    AsyncStorage.getItem("@todos")
+    .then(res=>{
+      console.log(res);
+      if(res !== null){
+        const parsedRes=JSON.parse(res)
+        setTodos(parsedRes)
+      }
+    })
+    .catch(err=>console.log(err))
+  },[])
 
   return (
     <SafeAreaView style={[generalStyles.flex1,generalStyles.bgWhite]}>
@@ -51,11 +69,11 @@ function App(){
         {todos.length === 0 ? (<Text style={styles.emptyText}>Henuz Kayitli Bir Todo Bulunmamaktadir</Text>) : (
         <ScrollView style={styles.scrollView}>
           {
-            todos?.map(todo=>(<Todo key={todo?.id} todo={todo}/>))
+            todos?.map(todo=>(<Todo todos={todos} setTodos={setTodos} key={todo?.id} todo={todo}/>))
           }
           
         </ScrollView>)}
-        <Text>Todo App</Text>
+        
      
       </View>
         

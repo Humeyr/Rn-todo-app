@@ -14,6 +14,11 @@ const styles=StyleSheet.create({
         color:colors.textPrimary,
         fontSize:25
     },
+    completedTitle:{
+        color:colors.danger,
+        textDecorationLine:  'line-through'
+
+    },
     date:{
         color:colors.textPrimary,
         marginTop:10
